@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { cartItem } from '../item-definitions';
+import { ShopListService } from '../shop-list.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,7 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  collapse: boolean = true;
+  cartItems: cartItem[]
+  collapse: boolean = true
 
-  constructor() { }
+  constructor(private ShopListService: ShopListService) { 
+    this.cartItems = ShopListService.getCart()
+  }
 }
