@@ -9,9 +9,9 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { ShopPageComponent } from './shop-page/shop-page.component';
 import { ShopItemComponent } from './shop-item/shop-item.component';
 import { CartPageComponent } from './cart-page/cart-page.component';
-// import { HomeComponent } from './home/home.component';
-// import { CounterComponent } from './counter/counter.component';
-// import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { CartItemComponent } from './cart-item/cart-item.component';
+import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
+import { checkServerIdentity } from 'tls';
 
 @NgModule({
   declarations: [
@@ -20,9 +20,8 @@ import { CartPageComponent } from './cart-page/cart-page.component';
     ShopPageComponent,
     ShopItemComponent,
     CartPageComponent,
-    // HomeComponent,
-    // CounterComponent,
-    // FetchDataComponent
+    CartItemComponent,
+    CheckoutPageComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,9 +29,8 @@ import { CartPageComponent } from './cart-page/cart-page.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: ShopPageComponent, pathMatch: 'full' },
-      // { path: '', component: HomeComponent, pathMatch: 'full' },
-      // { path: 'counter', component: CounterComponent },
-      // { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'cart', component: CartPageComponent },
+      { path: 'checkout', component: CheckoutPageComponent },
     ])
   ],
   providers: [],

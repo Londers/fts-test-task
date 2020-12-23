@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CartListService } from '../cart-list.service';
+import { cartItem } from '../item-definitions';
 
 @Component({
   selector: 'app-cart-page',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CartPageComponent implements OnInit {
 
-  constructor() { }
+  cartList: cartItem[]
+
+  constructor(private cartListService: CartListService) {
+    cartListService.cartItemsObservable.subscribe(value => {
+      this.cartList = value;
+    })
+  }
 
   ngOnInit() {
   }
 
+  clearCart(): void {
+    this.cartListService.clearCart();
+  }
 }

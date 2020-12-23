@@ -1,6 +1,6 @@
 export interface cartItem {
-    id: number,
-    item: shopItem,
+    cartId: number,
+    shopItem: shopItem,
     quantity: number
 }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { shopItem } from 'src/app/item-definitions';
-import { ShopListService } from '../shop-list.service';
+import { CartListService } from '../cart-list.service';
 
 @Component({
   selector: 'app-shop-page',
@@ -9,10 +9,10 @@ import { ShopListService } from '../shop-list.service';
 })
 export class ShopPageComponent implements OnInit {
   shopList: shopItem[]
-  constructor(private shopListService: ShopListService) { }
+  constructor(private cartListService: CartListService) { }
 
   ngOnInit() {
-    this.shopList = this.shopListService.getShopList()
+    this.shopList = this.cartListService.getShopList()
   }
 
 }

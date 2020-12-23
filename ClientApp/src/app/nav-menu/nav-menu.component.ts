@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { cartItem } from '../item-definitions';
-import { ShopListService } from '../shop-list.service';
+import { CartListService } from '../cart-list.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -11,7 +11,10 @@ export class NavMenuComponent {
   cartItems: cartItem[]
   collapse: boolean = true
 
-  constructor(private ShopListService: ShopListService) { 
-    this.cartItems = ShopListService.getCart()
+  constructor(private cartListService: CartListService) { 
+    // this.cartItems = ShopListService.getCartList()
+    cartListService.cartItemsObservable.subscribe(value => {
+      this.cartItems = value;
+    })
   }
 }
