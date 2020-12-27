@@ -25,25 +25,49 @@
         </mat-checkbox>
         <br>
         <button class="btn btn-primary btn-large" matStepperNext>Продолжить</button>
-        <mat-error *ngIf="firstFormGroup.get('personalData')">Чтобы продолжить, согласитесь на обработку персональных данных
+        <mat-error *ngIf="firstFormGroup.get('personalData')">Чтобы продолжить, согласитесь на обработку персональных
+          данных
         </mat-error>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Fill out your address</ng-template>
+    <mat-step>
+      <ng-template matStepLabel>Подтверждение заказа</ng-template>
+      <app-cart-item *ngFor="let item of cartList" [item]=item></app-cart-item>
+      <div>
+        <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
+        <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
+      </div>
+      <!-- <ng-template matStepLabel>Fill out your address</ng-template>
         <mat-form-field>
           <mat-label>Address</mat-label>
           <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
         </mat-form-field>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious>Назад</button>
+          <button mat-button matStepperNext>Продолжить</button>
+        </div> -->
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Способ доставки</ng-template>
+        <mat-form-field>
+          <mat-label>СНИЛС</mat-label>
+          <input pattern="^\d{3}-\d{3}-\d{3} \d{2}$" matInput formControlName="secondCtrl" placeholder="СНИЛС" required>
+          <mat-error *ngIf="secondFormGroup.get('secondCtrl') && secondFormGroup.get('secondCtrl').touched">Некорректный
+            номер СНИЛС
+          </mat-error>
+        </mat-form-field>
+
+        <input type="file" (change)="fileChange($event)"  class="form-control filed" >
+
+        <div>
+          <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
+          <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
         </div>
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
+      <ng-template matStepLabel>gg</ng-template>
       <p>You are now done.</p>
       <div>
         <button mat-button matStepperPrevious>Back</button>

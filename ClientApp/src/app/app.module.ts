@@ -14,7 +14,7 @@ import { CartItemComponent } from './cart-item/cart-item.component';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material-module';
-import { MatNativeDateModule } from '@angular/material';
+import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material';
 // import { checkServerIdentity } from 'tls';
 
 @NgModule({
@@ -42,7 +42,7 @@ import { MatNativeDateModule } from '@angular/material';
     MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
