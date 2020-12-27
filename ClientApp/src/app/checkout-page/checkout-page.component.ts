@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartListService } from '../cart-list.service';
 import { cartItem } from '../item-definitions';
@@ -10,42 +10,67 @@ import { cartItem } from '../item-definitions';
 })
 export class CheckoutPageComponent implements OnInit {
 
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  // thirdFormGroup: FormGroup;
+  firstFormGroup: FormGroup
+  secondFormGroup: FormGroup
+  thirdFormGroup: FormGroup
   cartList: cartItem[]
-  selectedFile: File
+  selectedDeliveryMethod = 'pickup'
+  selectedCity = 'moscow'
+  personalDataAgreement = true
+  imageDisplay: string | ArrayBuffer;
+  userData: {}
 
   constructor(private _formBuilder: FormBuilder, private cartListService: CartListService) {
     cartListService.cartItemsObservable.subscribe(value => {
       this.cartList = value;
     })
-    // this.regexp = new RegExp('^\d{3}-\d{3}-\d{3} \d{2}$');
   }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      patronymic: ['', Validators.required],
       phone: ['', Validators.required],
       personalData: ['', Validators.requiredTrue]
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      snils: ['', Validators.required],
+      userPhoto: ['', Validators.required]
     });
-    // this.thirdFormGroup = this._formBuilder.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   phone: ['', Validators.required],
-    //   personalData: ['', Validators.required]
-    // });
+    this.thirdFormGroup = this._formBuilder.group({
+      address: ['', Validators.required],
+      postcode: ['', Validators.required],
+    });
   }
 
-  fileChange(event) {
-    this.selectedFile = event.target.files[0]
+  onFileSelect(event: File[]) {
+    const reader = new FileReader();
+    reader.readAsDataURL(event[0]);
+    reader.onload = () =>
+      this.imageDisplay = reader.result;
+    console.log(this.imageDisplay)
   }
 
-  onUpload() {
-    console.log(this.selectedFile.name)
+  deliverySelect(value: string): void {
+    this.selectedDeliveryMethod = value
   }
-}
+
+  citySelect(value: string): void {
+    this.selectedCity = value
+  }
+
+  personalDataCheck(): void {
+    this.personalDataAgreement = this.firstFormGroup.get('personalData').valid
+  }
+
+  testData() {
+    let obj = {
+      ...this.firstFormGroup.value,
+      deliveryMethod: this.deliverySelect,
+      snils: this.secondFormGroup.get('snils').value,
+      userPhoto: this.imageDisplay,
+    }
+    this.userData = (this.selectedDeliveryMethod === 'delivery') ? { ...obj, ...this.thirdFormGroup.value } : { ...obj, city: 'moscow' }
+  }
+} 

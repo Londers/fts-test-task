@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -41,6 +42,7 @@ import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } 
     MaterialModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    MaterialFileInputModule,
   ],
   providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]

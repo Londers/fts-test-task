@@ -25,3 +25,16 @@
   button {
     margin: 1rem 0.5rem;
   }
+
+  label {
+    margin-right: 1rem;
+  }
+
+  input[type=file] {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }

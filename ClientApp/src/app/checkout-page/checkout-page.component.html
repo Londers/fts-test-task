@@ -4,15 +4,21 @@
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Личные данные</ng-template>
         <mat-form-field>
+          <mat-label>Фамилия</mat-label>
+          <input matInput formControlName="lastName" placeholder="Введите фамилию" required>
+          <mat-error *ngIf="firstFormGroup.get('lastName')">Пожалуйста, введите фамилию</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
           <mat-label>Имя</mat-label>
           <input matInput formControlName="firstName" placeholder="Введите имя" required>
           <mat-error *ngIf="firstFormGroup.get('firstName')">Пожалуйста, введите имя</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
-          <mat-label>Фамилия</mat-label>
-          <input matInput formControlName="lastName" placeholder="Введите фамилию" required>
-          <mat-error *ngIf="firstFormGroup.get('lastName')">Пожалуйста, введите фамилию</mat-error>
+          <mat-label>Отчество</mat-label>
+          <input matInput formControlName="patronymic" placeholder="Введите Отчество" required>
+          <mat-error *ngIf="firstFormGroup.get('patronymic')">Пожалуйста, введите отчество</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field>
@@ -24,9 +30,9 @@
         <mat-checkbox class="small mt-2" formControlName="personalData">Соглашение на обработку персональных данных
         </mat-checkbox>
         <br>
-        <button class="btn btn-primary btn-large" matStepperNext>Продолжить</button>
-        <mat-error *ngIf="firstFormGroup.get('personalData')">Чтобы продолжить, согласитесь на обработку персональных
-          данных
+        <button class="btn btn-primary btn-large" matStepperNext (click)="personalDataCheck()">Продолжить</button>
+        <mat-error *ngIf="!personalDataAgreement">Чтобы
+          продолжить, согласитесь на обработку персональных данных
         </mat-error>
       </form>
     </mat-step>
@@ -37,40 +43,72 @@
         <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
         <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
       </div>
-      <!-- <ng-template matStepLabel>Fill out your address</ng-template>
-        <mat-form-field>
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Назад</button>
-          <button mat-button matStepperNext>Продолжить</button>
-        </div> -->
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Способ доставки</ng-template>
+        <ng-template matStepLabel>СНИЛС и фото</ng-template>
         <mat-form-field>
           <mat-label>СНИЛС</mat-label>
-          <input pattern="^\d{3}-\d{3}-\d{3} \d{2}$" matInput formControlName="secondCtrl" placeholder="СНИЛС" required>
-          <mat-error *ngIf="secondFormGroup.get('secondCtrl') && secondFormGroup.get('secondCtrl').touched">Некорректный
+          <input pattern="^\d{3}-\d{3}-\d{3} \d{2}$" matInput formControlName="snils" placeholder="СНИЛС" required>
+          <mat-error *ngIf="secondFormGroup.get('snils') && secondFormGroup.get('snils').touched">Некорректный
             номер СНИЛС
           </mat-error>
         </mat-form-field>
-
-        <input type="file" (change)="fileChange($event)"  class="form-control filed" >
-
+        <div class="d-flex justify-content-center">
+          <mat-form-field>
+            <ngx-mat-file-input #photo formControlName="userPhoto" placeholder="Выберите вашу фотографию" accept="image/*" (change)="onFileSelect($event.target.files)">
+            </ngx-mat-file-input>
+          </mat-form-field>
+        </div>
         <div>
           <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
           <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
         </div>
       </form>
     </mat-step>
+    <mat-step [stepControl]="((selectedDeliveryMethod === 'delivery') ? thirdFormGroup : '')">
+      <ng-template matStepLabel>Способ доставки</ng-template>
+      <p>Способ доставки</p>
+      <select (change)="deliverySelect($event.target.value)">
+        <option value="pickup">Самовывоз</option>
+        <option value="delivery">Доставка</option>
+      </select>
+      <div class="container" *ngIf="selectedDeliveryMethod === 'pickup'">
+        <p>Выберите город для самовывоза</p>
+        <select (change)="citySelect($event.target.value)">
+          <option value="moscow">Москва</option>
+          <option value="voronezh">Воронеж</option>
+        </select>
+      </div>
+      <div class="container" *ngIf="selectedDeliveryMethod === 'delivery'">
+        <p>Проверьте правильность введённых данных для доставки по почте</p>
+        <p>ФИО: {{firstFormGroup.value.lastName}} {{firstFormGroup.value.firstName}} {{firstFormGroup.value.patronymic}}
+        </p>
+        <p>Номер телефона: {{firstFormGroup.value.phone}} </p>
+        <form [formGroup]="thirdFormGroup">
+          <mat-form-field>
+            <mat-label>Адрес</mat-label>
+            <input matInput formControlName="address" placeholder="Введите адрес" required>
+            <mat-error *ngIf="firstFormGroup.get('firsaddresstName')">Пожалуйста, введите адрес</mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Почтовый индекс</mat-label>
+            <input matInput formControlName="postcode" placeholder="Введите почтовый индекс" required>
+            <mat-error *ngIf="firstFormGroup.get('postcode')">Пожалуйста, введите индекс</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div>
+        <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
+        <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
+      </div>
+    </mat-step>
     <mat-step>
       <ng-template matStepLabel>gg</ng-template>
-      <p>You are now done.</p>
+      <pre>{{userData | json}}</pre>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperPrevious (click)="testData()">Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
       </div>
     </mat-step>
