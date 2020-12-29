@@ -20,6 +20,20 @@ export class CartPageComponent implements OnInit {
   ngOnInit() {
   }
 
+  getCartSum() {
+    let sum = 0
+    this.cartList.forEach((item, index) => sum += (item.quantity * item.shopItem.price))
+    return sum;
+  }
+
+  addItem(event: cartItem) {
+    this.cartListService.changeQuantity(event.cartId, event.quantity)
+  }
+
+  removeItem(cartId: number) {
+    this.cartListService.removeFromCart(cartId)
+  }
+
   clearCart(): void {
     this.cartListService.clearCart();
   }

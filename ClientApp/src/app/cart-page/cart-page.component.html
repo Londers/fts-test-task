@@ -1,8 +1,11 @@
 <div class="container overflow-auto border" style="max-height: 60vmin;">
-    <app-cart-item *ngFor="let item of cartList" [item]=item></app-cart-item>
+    <app-cart-item *ngFor="let item of cartList" [item]=item [edit]=true (changeItemQuantityEvent)="addItem($event)" (removeItemEvent)="removeItem($event)"></app-cart-item>
     <div class="empty" *ngIf="cartList.length === 0">Корзина пуста</div>
 </div>
-<div class="d-flex flex-row-reverse">
+<h4 *ngIf="cartList.length" class="d-flex flex-row-reverse">
+    Сумма: {{getCartSum()}} руб.
+</h4>
+<div *ngIf="cartList.length" class="d-flex flex-row-reverse">
     <button class="btn btn-lg btn-primary p-2" (click)="clearCart()">Очистить корзину</button>
-    <a class="link" href="/checkout"><button class="btn btn-lg btn-primary p-2">Оформить заказ</button> <span class="sr-only">(current)</span></a>
+    <a class="link" href="/order"><button class="btn btn-lg btn-primary p-2">Оформить заказ</button> <span class="sr-only">(current)</span></a>
 </div>

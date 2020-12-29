@@ -12,7 +12,6 @@ export class NavMenuComponent {
   collapse: boolean = true
 
   constructor(private cartListService: CartListService) { 
-    // this.cartItems = ShopListService.getCartList()
     cartListService.cartItemsObservable.subscribe(value => {
       this.cartItems = value;
     })

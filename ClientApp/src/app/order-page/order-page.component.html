@@ -38,7 +38,12 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Подтверждение заказа</ng-template>
-      <app-cart-item *ngFor="let item of cartList" [item]=item></app-cart-item>
+      <div class="container overflow-auto border" style="max-height: 60vmin;">
+        <app-cart-item *ngFor="let item of cartList" [item]=item [edit]=false></app-cart-item>
+      </div>
+      <h4 class="d-flex flex-row-reverse">
+        Сумма: {{getCartSum()}} руб.
+      </h4>
       <div>
         <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
         <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
@@ -56,7 +61,8 @@
         </mat-form-field>
         <div class="d-flex justify-content-center">
           <mat-form-field>
-            <ngx-mat-file-input #photo formControlName="userPhoto" placeholder="Выберите вашу фотографию" accept="image/*" (change)="onFileSelect($event.target.files)">
+            <ngx-mat-file-input #photo formControlName="userPhoto" placeholder="Выберите вашу фотографию"
+              accept="image/*" (change)="onFileSelect($event.target.files)">
             </ngx-mat-file-input>
           </mat-form-field>
         </div>
@@ -101,15 +107,28 @@
       </div>
       <div>
         <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
-        <button class="btn btn-primary btn-large" mat-button matStepperNext>Продолжить</button>
+        <button class="btn btn-primary btn-large" (click)="getData()" mat-button matStepperNext>Продолжить</button>
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>gg</ng-template>
+      <ng-template matStepLabel>Оформление заказа</ng-template>
       <pre>{{userData | json}}</pre>
       <div>
-        <button mat-button matStepperPrevious (click)="testData()">Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button class="btn btn-primary btn-large" mat-button matStepperPrevious>Назад</button>
+        <button class="btn btn-primary btn-large" (click)="finishOrder()" mat-button matStepperNext>Закончить
+          оформление</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Последний шаг</ng-template>
+      <p *ngIf="orderNumber !== undefined">Заказ №{{orderNumber}} успешно оформлен!</p>
+      <div *ngIf="orderNumber===undefined">
+        <p>Произошла ошибка сервера</p>
+        <button class="btn btn-primary btn-large" (click)="finishOrder()">Отправить данные заново</button>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Вернуться</button>
+        <button mat-button (click)="returnToMainPage()">Закончить</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

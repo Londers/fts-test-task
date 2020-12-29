@@ -1,13 +1,27 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <h3 class="col-sm-10">{{item.name}}</h3>
+            <h4 class="col-sm-5">{{item.name}}</h4>
+            <div class="col-sm-3 row mt-2 text-center">
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary" (click)="numberDecrease()">-</button>
+                </div>
+                <div *ngIf="quantity !== 0" class="col-sm-5 text-center">
+                    <div class="counter nowrap">{{quantity}} шт.</div>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary" (click)="numberIncrease()">+</button>
+                </div>
+            </div>
+            <div class="col-sm-2 mt-2">
+                <h4 class="nowrap" *ngIf="quantity !== 0">{{item.price * quantity}} руб.</h4>
+            </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-primary" (click)="addToCart()">Добавить в корзину</button>
             </div>
         </div>
         <p>Цвет : {{item.attr.color}}</p>
         <p>Формат : {{item.attr.format}}</p>
-        <strong>Цена за 1шт. : {{item.price}} руб.</strong>
+        <strong>Цена за 1шт : {{item.price}} руб.</strong>
     </div>
 </div>

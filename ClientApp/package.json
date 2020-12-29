@@ -28,7 +28,7 @@
     "bootstrap": "^4.3.1",
     "core-js": "^3.3.3",
     "jquery": "^3.5.1",
-    "ngx-material-file-input": "^2.1.1",
+    "ngx-material-file-input": "^2.1.0",
     "oidc-client": "^1.9.1",
     "popper.js": "^1.16.0",
     "rxjs": "^6.5.3",
@@ -51,6 +51,9 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
     "typescript": "3.5.3"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.5.5"
   },
   "optionalDependencies": {
     "node-sass": "^4.12.0",

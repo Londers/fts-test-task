@@ -11,7 +11,7 @@ export class CartListService {
   shopList: shopItem[]
   itemsOnCart: cartItem[] = []
 
-  public cartItemsObservable = new BehaviorSubject <cartItem[]>(this.itemsOnCart);
+  public cartItemsObservable = new BehaviorSubject<cartItem[]>(this.itemsOnCart);
 
   emitConfig(val: cartItem[]) {
     this.cartItemsObservable.next(val);
@@ -31,23 +31,36 @@ export class CartListService {
   }
 
   //Методы для работы с корзиной
+  //Получение массива добавленных в корзину товаров
   getCartList(): cartItem[] {
-    return this.itemsOnCart;
+    return this.cartItemsObservable.getValue();
   }
 
+  //Добавление товара в корзину
   addToCart(item: shopItem, quantity: number): void {
-    this.itemsOnCart.push({ cartId: this.itemsOnCart.length, shopItem: item, quantity: quantity });
-    this.emitConfig(this.itemsOnCart)
-    localStorage.setItem('cart', JSON.stringify(this.itemsOnCart))
-    // return this.itemsOnCart;
+    let itemsOnCart = this.getCartList();
+    itemsOnCart.push({ cartId: itemsOnCart.length, shopItem: item, quantity: quantity });
+    this.emitConfig(itemsOnCart)
+    localStorage.setItem('cart', JSON.stringify(itemsOnCart))
   }
 
-  removeFromCart(cartId: number): cartItem[] {
-    this.itemsOnCart = this.itemsOnCart.filter((cartItem: cartItem) => cartItem.cartId !== cartId);
-    localStorage.setItem('cart', JSON.stringify(this.itemsOnCart))
-    return this.itemsOnCart;
+  //Изменение количества товара
+  changeQuantity(cartId: number, newQuantity: number) {
+    let itemsOnCart = this.getCartList();
+    itemsOnCart[cartId].quantity = newQuantity
+    this.emitConfig(itemsOnCart)
+    localStorage.setItem('cart', JSON.stringify(itemsOnCart))
   }
 
+  //Удаление товара из корзины
+  removeFromCart(cartId: number): void {
+    let itemsOnCart = this.getCartList();
+    itemsOnCart = itemsOnCart.filter((cartItem: cartItem) => cartItem.cartId !== cartId);
+    this.emitConfig(itemsOnCart)
+    localStorage.setItem('cart', JSON.stringify(itemsOnCart))
+  }
+
+  //Очистка корзины
   clearCart(): void {
     this.emitConfig([]);
     localStorage.setItem('cart', '[]')

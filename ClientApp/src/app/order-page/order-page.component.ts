@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartListService } from '../cart-list.service';
 import { cartItem } from '../item-definitions';
 
 @Component({
-  selector: 'checkout-page',
-  templateUrl: 'checkout-page.component.html',
-  styleUrls: ['checkout-page.component.css']
+  selector: 'order-page',
+  templateUrl: 'order-page.component.html',
+  styleUrls: ['order-page.component.css']
 })
-export class CheckoutPageComponent implements OnInit {
+export class orderPageComponent implements OnInit {
 
   firstFormGroup: FormGroup
   secondFormGroup: FormGroup
@@ -17,10 +18,11 @@ export class CheckoutPageComponent implements OnInit {
   selectedDeliveryMethod = 'pickup'
   selectedCity = 'moscow'
   personalDataAgreement = true
-  imageDisplay: string | ArrayBuffer;
+  imageDisplay: string | ArrayBuffer
   userData: {}
+  orderNumber: Object
 
-  constructor(private _formBuilder: FormBuilder, private cartListService: CartListService) {
+  constructor(private http: HttpClient, private _formBuilder: FormBuilder, private cartListService: CartListService) {
     cartListService.cartItemsObservable.subscribe(value => {
       this.cartList = value;
     })
@@ -42,6 +44,17 @@ export class CheckoutPageComponent implements OnInit {
       address: ['', Validators.required],
       postcode: ['', Validators.required],
     });
+    if (this.cartList.length === 0) window.location.href = '/'
+  }
+
+  getCartSum() {
+    let sum = 0
+    this.cartList.forEach((item, index) => sum += (item.quantity * item.shopItem.price))
+    return sum;
+  }
+
+  clearCart(): void {
+    this.cartListService.clearCart();
   }
 
   onFileSelect(event: File[]) {
@@ -49,7 +62,6 @@ export class CheckoutPageComponent implements OnInit {
     reader.readAsDataURL(event[0]);
     reader.onload = () =>
       this.imageDisplay = reader.result;
-    console.log(this.imageDisplay)
   }
 
   deliverySelect(value: string): void {
@@ -64,13 +76,25 @@ export class CheckoutPageComponent implements OnInit {
     this.personalDataAgreement = this.firstFormGroup.get('personalData').valid
   }
 
-  testData() {
+  getData() {
     let obj = {
       ...this.firstFormGroup.value,
       deliveryMethod: this.deliverySelect,
       snils: this.secondFormGroup.get('snils').value,
       userPhoto: this.imageDisplay,
+      order: this.cartListService.getCartList(),
     }
     this.userData = (this.selectedDeliveryMethod === 'delivery') ? { ...obj, ...this.thirdFormGroup.value } : { ...obj, city: 'moscow' }
+  }
+
+  finishOrder() {
+    this.http.post('https://localhost:5001/shopitem/UserData', JSON.stringify(this.userData)).subscribe(result => {
+      this.clearCart()
+      this.orderNumber = result
+    }, error => console.error(error));
+  }
+
+  returnToMainPage() {
+    window.location.href = '/'
   }
 } 

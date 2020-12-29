@@ -4,3 +4,13 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
+
+.counter {
+    font-size: medium;
+    margin-left: 1rem;
+    margin-top: .5rem;
+}
+
+.nowrap {
+    word-wrap: normal;
+}

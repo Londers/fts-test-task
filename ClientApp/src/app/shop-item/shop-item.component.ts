@@ -9,13 +9,22 @@ import { CartListService } from '../cart-list.service';
 })
 export class ShopItemComponent implements OnInit {
   @Input() item: shopItem;
+  quantity = 1
 
   constructor(private cartListService: CartListService) { }
 
   ngOnInit() {
   }
 
+  numberIncrease(): void {
+    this.quantity++
+  }
+
+  numberDecrease(): void {
+    if (this.quantity !== 0) this.quantity--
+  }
+  
   addToCart(): void {
-    this.cartListService.addToCart(this.item, 1)
+    this.cartListService.addToCart(this.item, this.quantity)
   }
 }

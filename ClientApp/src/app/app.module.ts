@@ -12,7 +12,7 @@ import { ShopPageComponent } from './shop-page/shop-page.component';
 import { ShopItemComponent } from './shop-item/shop-item.component';
 import { CartPageComponent } from './cart-page/cart-page.component';
 import { CartItemComponent } from './cart-item/cart-item.component';
-import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
+import { orderPageComponent } from './order-page/order-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material-module';
 import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material';
@@ -26,7 +26,7 @@ import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } 
     ShopItemComponent,
     CartPageComponent,
     CartItemComponent,
-    CheckoutPageComponent,
+    orderPageComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,7 +35,7 @@ import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } 
     RouterModule.forRoot([
       { path: '', component: ShopPageComponent, pathMatch: 'full' },
       { path: 'cart', component: CartPageComponent },
-      { path: 'checkout', component: CheckoutPageComponent },
+      { path: 'order', component: orderPageComponent },
     ]),
     BrowserAnimationsModule,
     MatStepperModule,
